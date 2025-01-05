@@ -2,7 +2,8 @@
 # Licensed under the MIT License
 
 """The Query Engine package root."""
-
+import json
+#a=[json.loads(l) for l in open('/data/chenxiaoxuan/cxxpythonfiles/GraphRAG/model_train/query_prompt_and_response/query_list.json','r')]
 import argparse
 from enum import Enum
 
@@ -75,33 +76,37 @@ if __name__ == "__main__":
         action="store_true",
     )
     parser.add_argument(
-        "query",
+        "--query_list_file_path",
         nargs=1,
         help="The query to run",
         type=str,
     )
     args = parser.parse_args()
 
-    match args.method:
-        case SearchType.LOCAL:
-            run_local_search(
-                args.config,
-                args.data,
-                args.root,
-                args.community_level,
-                args.response_type,
-                args.streaming,
-                args.query[0],
-            )
-        case SearchType.GLOBAL:
-            run_global_search(
-                args.config,
-                args.data,
-                args.root,
-                args.community_level,
-                args.response_type,
-                args.streaming,
-                args.query[0],
-            )
-        case _:
-            raise ValueError(INVALID_METHOD_ERROR)
+    #print(args.query_list_file_path)
+    a=[json.loads(l) for l in open(args.query_list_file_path[0],'r')]
+    for ax in a:
+        assert isinstance(ax["query"], str)
+        match args.method:
+            case SearchType.LOCAL:
+                run_local_search(
+                    args.config,
+                    args.data,
+                    args.root,
+                    args.community_level,
+                    args.response_type,
+                    args.streaming,
+                    ax["query"],
+                )
+            case SearchType.GLOBAL:
+                run_global_search(
+                    args.config,
+                    args.data,
+                    args.root,
+                    args.community_level,
+                    args.response_type,
+                    args.streaming,
+                    ax["query"],
+                )
+            case _:
+                raise ValueError(INVALID_METHOD_ERROR)

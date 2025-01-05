@@ -67,3 +67,9 @@ ragtest/
 .ragtest/
 .pipelines
 .pipeline
+
+cache
+input
+output
+prompts
+prompts_zh

@@ -4,12 +4,15 @@
 """The Indexing Engine package root."""
 
 import argparse
+import sys
+sys.path.append('/data/chenxiaoxuan/cxxpythonfiles/GraphRAG/ragtest')
+print(sys.path)
 
 from graphrag.utils.cli import dir_exist, file_exist
 
-from .cli import index_cli
-from .emit.types import TableEmitterType
-from .progress.types import ReporterType
+from graphrag.index.cli import index_cli
+from graphrag.index.emit.types import TableEmitterType
+from graphrag.index.progress.types import ReporterType
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
