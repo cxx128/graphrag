@@ -88,12 +88,12 @@ class LocalSearch(BaseSearch):
             )
 
             # 记录这个过程，后面训练一个本地部署的query大模型
-            with open('/data/chenxiaoxuan/cxxpythonfiles/GraphRAG/model_train/query_prompt_and_response/0.txt','a+') as file:
-                file.write('######_cxx_begin_cxx_######\n\n\n')
-                file.write(str(search_messages))
-                file.write('\n\n###_cxx_response_cxx_###\n\n')
-                file.write(response)
-                file.write('\n\n\n######_cxx_end_cxx_######\n\n\n')
+            #with open('/data/chenxiaoxuan/cxxpythonfiles/GraphRAG/model_train/query_prompt_and_response/0.txt','a+') as file:
+            #    file.write('######_cxx_begin_cxx_######\n\n\n')
+            #    file.write(str(search_messages))
+            #    file.write('\n\n###_cxx_response_cxx_###\n\n')
+            #    file.write(response)
+            #    file.write('\n\n\n######_cxx_end_cxx_######\n\n\n')
                 
             return SearchResult(
                 response=response,
