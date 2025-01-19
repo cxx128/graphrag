@@ -26,6 +26,9 @@ DEFAULT_LLM_PARAMS = {
     "temperature": 0.0,
 }
 
+
+from graphrag.cxx_custom_llm_embed import CUSTOM_LLM_AND_EMBED,llm_generate,_embedding_model,_custom_llm,_custom_tokenizer
+
 log = logging.getLogger(__name__)
 
 
@@ -72,28 +75,38 @@ class LocalSearch(BaseSearch):
         )
         log.info("GENERATE ANSWER: %s. QUERY: %s", start_time, query)
         try:
-            search_prompt = self.system_prompt.format(
-                context_data=context_text, response_type=self.response_type
-            )
-            search_messages = [
-                {"role": "system", "content": search_prompt},
-                {"role": "user", "content": query},
-            ]
+            if CUSTOM_LLM_AND_EMBED==True:
+                search_prompt = self.system_prompt.format(
+                    context_data=context_text, response_type=self.response_type
+                )
+                query_prompt=query
+                system_prompt=search_prompt
+                custom_llm_model,custom_tokenizer=_custom_llm,_custom_tokenizer#loda_custom_llm()
+                response = llm_generate(custom_llm_model,custom_tokenizer,query_prompt,system_prompt)
+            else:
+                search_prompt = self.system_prompt.format(
+                    context_data=context_text, response_type=self.response_type
+                )
+                search_messages = [
+                    {"role": "system", "content": search_prompt},
+                    {"role": "user", "content": query},
+                ]
 
-            response = await self.llm.agenerate(
-                messages=search_messages,
-                streaming=True,
-                callbacks=self.callbacks,
-                **self.llm_params,
-            )
 
-            # 记录这个过程，后面训练一个本地部署的query大模型
-            #with open('/data/chenxiaoxuan/cxxpythonfiles/GraphRAG/model_train/query_prompt_and_response/0.txt','a+') as file:
-            #    file.write('######_cxx_begin_cxx_######\n\n\n')
-            #    file.write(str(search_messages))
-            #    file.write('\n\n###_cxx_response_cxx_###\n\n')
-            #    file.write(response)
-            #    file.write('\n\n\n######_cxx_end_cxx_######\n\n\n')
+                response = await self.llm.agenerate(
+                    messages=search_messages,
+                    streaming=True,
+                    callbacks=self.callbacks,
+                    **self.llm_params,
+                )
+
+                # 记录这个过程，后面训练一个本地部署的query大模型
+                #with open('/data/chenxiaoxuan/cxxpythonfiles/GraphRAG/model_train/query_prompt_and_response/0.txt','a+') as file:
+                #    file.write('######_cxx_begin_cxx_######\n\n\n')
+                #    file.write(str(search_messages))
+                #    file.write('\n\n###_cxx_response_cxx_###\n\n')
+                #    file.write(response)
+                #    file.write('\n\n\n######_cxx_end_cxx_######\n\n\n')
                 
             return SearchResult(
                 response=response,

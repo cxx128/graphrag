@@ -24,7 +24,7 @@ llm:
 
 parallelization:
   stagger: 0.3
-  # num_threads: 50 # the number of threads to use for parallel processing
+  num_threads: 50 #50 # the number of threads to use for parallel processing
 
 async_mode: threaded # or asyncio
 
@@ -59,7 +59,7 @@ chunks:
 input:
   type: file # or blob
   file_type: text # or csv
-  base_dir: "input"
+  base_dir: "/mnt/afs/chenxiaoxuan/RAG_folder/GraphRAG/ragtest/input/pretrain_ocr_books/电气专业大学教材result"
   file_encoding: utf-8
   file_pattern: ".*\\.txt$"
 

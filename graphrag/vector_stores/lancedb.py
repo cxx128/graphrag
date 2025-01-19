@@ -18,6 +18,8 @@ from .base import (
 )
 
 
+from graphrag.cxx_custom_llm_embed import CUSTOM_LLM_AND_EMBED,cxx_get_embedding,_embedding_model,_custom_llm,_custom_tokenizer
+
 class LanceDBVectorStore(BaseVectorStore):
     """The LanceDB vector storage implementation."""
 
@@ -115,7 +117,13 @@ class LanceDBVectorStore(BaseVectorStore):
         self, text: str, text_embedder: TextEmbedder, k: int = 10, **kwargs: Any
     ) -> list[VectorStoreSearchResult]:
         """Perform a similarity search using a given input text."""
-        query_embedding = text_embedder(text)
+        
+        if CUSTOM_LLM_AND_EMBED==True:
+            model=_embedding_model#get_custom_embed_model()
+            query_embedding = cxx_get_embedding(model,text)
+            query_embedding = query_embedding.tolist()
+        else:
+            query_embedding = text_embedder(text)
         if query_embedding:
             return self.similarity_search_by_vector(query_embedding, k)
         return []

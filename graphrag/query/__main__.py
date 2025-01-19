@@ -7,7 +7,7 @@ import argparse
 from enum import Enum
 
 import sys
-sys.path.append('/data/chenxiaoxuan/cxxpythonfiles/GraphRAG/ragtest')
+sys.path.append('/mnt/afs/chenxiaoxuan/RAG_folder/GraphRAG/ragtest')
 print(sys.path)
 
 from graphrag.utils.cli import dir_exist, file_exist
